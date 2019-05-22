@@ -52,7 +52,7 @@ public class PostResponse {
         return moipAccount;
     }
 
-    static class MoipAccount {
+    public static class MoipAccount {
 
         @SerializedName("ID")
         @Expose

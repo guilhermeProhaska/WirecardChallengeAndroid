@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhermeprohaska.wirecardchallengeandroid.R;
-import com.guilhermeprohaska.wirecardchallengeandroid.entities.Orders;
+import com.guilhermeprohaska.wirecardchallengeandroid.entities.GetResponse;
 
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
-    private List<Orders> ordersList;
+    private List<GetResponse.Orders> ordersList;
     private Context mCtx;
 
-    public OrderAdapter(List<Orders> ordersList, Context mCtx) {
+    public OrderAdapter(List<GetResponse.Orders> ordersList, Context mCtx) {
         this.ordersList = ordersList;
         this.mCtx = mCtx;
     }
@@ -37,10 +37,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         if (ordersList != null){
             holder.textViewOwnId.setText(ordersList.get(position).getOwnId());
-            holder.textViewEmail.setText(ordersList.get(position).getCustomer());
+            holder.textViewEmail.setText(ordersList.get(position).getCustomer().getEmail());
             holder.textViewCurrentStatus.setText(ordersList.get(position).getStatus());
             holder.textViewCurrentStatusDate.setText(ordersList.get(position).getUpdateAt());
-            holder.textViewTotalAmount.setText(ordersList.get(position).getAmount());
+            holder.textViewTotalAmount.setText(ordersList.get(position).getAmount().getTotal());
         }
         else {
             Toast.makeText(mCtx,"Orders is null!", Toast.LENGTH_SHORT).show();

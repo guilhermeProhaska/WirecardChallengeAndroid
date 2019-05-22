@@ -2,6 +2,7 @@ package com.guilhermeprohaska.wirecardchallengeandroid.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,7 +10,9 @@ import android.widget.Toast;
 
 import com.guilhermeprohaska.wirecardchallengeandroid.R;
 import com.guilhermeprohaska.wirecardchallengeandroid.entities.PostResponse;
+import com.guilhermeprohaska.wirecardchallengeandroid.entities.User;
 import com.guilhermeprohaska.wirecardchallengeandroid.service.RetrofitClient;
+import com.guilhermeprohaska.wirecardchallengeandroid.storage.SharedPreferencesManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +23,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTextUsername, editTextPassword;
     private String client_id = "APP-H1DR0RPHV7SP", client_secret = "05acb6e128bc48b2999582cd9a2b9787",
             scope = "APP_ADMIN", grant_type = "password", device_id = "um id para o device", username, password;
+    private PostResponse postResponse;
+    private int postCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.buttonLoginId).setOnClickListener(this);
         findViewById(R.id.editTextLostPasswordId).setOnClickListener(this);
         findViewById(R.id.editTextCreateNewPasswordId).setOnClickListener(this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(SharedPreferencesManager.getInstance(this).isLoggedIn()){
+            editTextUsername.setText(SharedPreferencesManager.getInstance(this).getUser().getUsername());
+            editTextPassword.setText(SharedPreferencesManager.getInstance(this).getUser().getPassword());
+            userSignUp();
+            callPostResponse();
+            userOrders();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        SharedPreferencesManager.getInstance(this).clearUser();
+        SharedPreferencesManager.getInstance(this).clearToken();
     }
 
     @Override
@@ -41,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.buttonLoginId:
                 userSignUp();
                 callPostResponse();
+                userOrders();
                 break;
             case R.id.editTextLostPasswordId:
                 break;
@@ -78,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void callPostResponse() {
 
+
         Call<PostResponse> call = RetrofitClient
                 .getInstance()
                 .getClientRetrofit()
@@ -87,9 +116,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
 
-                if(response.code() == 200){
+                postCode = response.code();
+                postResponse = response.body();
+
+                if(postCode == 200){
                     Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_LONG).show();
-                    editTextUsername.setText(response.body().getAccessToken());
                 } else {
                     Toast.makeText(LoginActivity.this, "Login error!\n"
                             + response.errorBody(), Toast.LENGTH_LONG).show();
@@ -104,5 +135,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 editTextUsername.setText("Failure!" + t.getMessage());
             }
         });
+
+        if(postCode == 200){
+            SharedPreferencesManager.getInstance(LoginActivity.this).saveUser(new User(username,password));
+            SharedPreferencesManager.getInstance(LoginActivity.this).savePostResponse(postResponse);
+        }
+    }
+
+    private void userOrders() {
+
+        startActivity(new Intent(LoginActivity.this, OrderActivity.class));
     }
 }
