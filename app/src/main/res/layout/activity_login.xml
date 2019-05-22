@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#008bcc"
+    tools:context=".ui.LoginActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="260dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginBottom="71dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextUsernameId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/editTextUsernameId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:layout_marginBottom="92dp"
+        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:ems="10"
+        android:hint="@string/editTextUsername_hint"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLoginId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/editTextPasswordId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+        android:drawableRight="@android:drawable/ic_menu_view"
+        android:ems="10"
+        android:hint="@string/editTextPassword_hint"
+        android:inputType="textPassword"
+        android:textColor="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextUsernameId" />
+
+    <Button
+        android:id="@+id/buttonLoginId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:layout_marginBottom="34dp"
+        android:background="#3353AC"
+        android:text="@string/Button_login"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLostPasswordId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsernameId" />
+
+    <EditText
+        android:id="@+id/editTextLostPasswordId"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Esqueci minha senha"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextCreateNewPasswordId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginId" />
+
+    <EditText
+        android:id="@+id/editTextCreateNewPasswordId"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="63dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Criar uma conta nova"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLostPasswordId" />
+</androidx.constraintlayout.widget.ConstraintLayout>
