@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void callPostResponse() {
 
-
         Call<PostResponse> call = RetrofitClient
                 .getInstance()
                 .getClientRetrofit()
@@ -124,7 +123,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     Toast.makeText(LoginActivity.this, "Login error!\n"
                             + response.errorBody(), Toast.LENGTH_LONG).show();
-                    editTextUsername.setText("Login error!" + response.errorBody());
                 }
             }
 

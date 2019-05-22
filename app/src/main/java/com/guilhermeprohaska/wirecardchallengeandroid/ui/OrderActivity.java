@@ -6,39 +6,65 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Base64;
+import android.widget.Toast;
 
 import com.guilhermeprohaska.wirecardchallengeandroid.R;
 import com.guilhermeprohaska.wirecardchallengeandroid.adapter.OrderAdapter;
 import com.guilhermeprohaska.wirecardchallengeandroid.entities.GetResponse;
+import com.guilhermeprohaska.wirecardchallengeandroid.service.RetrofitOrder;
 import com.guilhermeprohaska.wirecardchallengeandroid.storage.SharedPreferencesManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderActivity extends AppCompatActivity {
 
-    private List<GetResponse.Orders> ordersList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private GetResponse.Orders.Customer customer = new GetResponse.Orders.Customer("name1", "email1@gmail.com");
-    private GetResponse.Orders.Amount amount = new GetResponse.Orders.Amount("R$ 1111,11");
+    private int responseCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(OrderActivity.this).getUser().getUsername()
-                , customer, "OK1", "01/01/1111", amount));
-        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(OrderActivity.this).getUser().getPassword()
-                , customer, "OK2", "02/02/2222", amount));
-        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(OrderActivity.this).getPostResponse().getAccessToken()
-                , customer, "OK3", "03/03/3333", amount));
-        ordersList.add(new GetResponse.Orders("4444", customer, "OK4", "04/04/4444", amount));
-
         recyclerView = findViewById(R.id.recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new OrderAdapter(ordersList,this));
+        final OrderAdapter orderAdapter = new OrderAdapter(this);
+        recyclerView.setAdapter(orderAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
+        Call<List<GetResponse>> ordersCall = RetrofitOrder
+                .getInstance()
+                .getOrderRetrofit()
+                .getRequest(Base64.encodeToString((
+                        SharedPreferencesManager.getInstance(OrderActivity.this).getPostResponse().getAccessToken()).getBytes(),Base64.NO_WRAP));
+
+        ordersCall.enqueue(new Callback<List<GetResponse>>() {
+            @Override
+            public void onResponse(Call<List<GetResponse>> call, Response<List<GetResponse>> response) {
+
+                responseCode = response.code();
+
+                if(response.body() != null){
+                    Toast.makeText(OrderActivity.this,"Get Successful!" + responseCode, Toast.LENGTH_LONG).show();
+                    orderAdapter.setOrdersList(response.body());
+
+                } else {
+                    Toast.makeText(OrderActivity.this,"Get error\n!" + response.errorBody(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GetResponse>> call, Throwable t) {
+                Toast.makeText(OrderActivity.this,"Failure Get\n" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

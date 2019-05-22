@@ -7,6 +7,7 @@ import androidx.test.runner.AndroidJUnit4;
 
 import com.guilhermeprohaska.wirecardchallengeandroid.R;
 import com.guilhermeprohaska.wirecardchallengeandroid.entities.GetResponse;
+import com.guilhermeprohaska.wirecardchallengeandroid.storage.SharedPreferencesManager;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,9 +35,12 @@ public class OrderActivityTest {
     @Test
     public void orderActivityTest() {
 
-        ordersList.add(new GetResponse.Orders("1111", customer, "OK1", "01/01/1111", amount));
-        ordersList.add(new GetResponse.Orders("2222", customer, "OK2", "02/02/2222", amount));
-        ordersList.add(new GetResponse.Orders("3333", customer, "OK3", "03/03/3333", amount));
+        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(mActivityTestRule.getActivity()).getUser().getUsername()
+                , customer, "OK1", "01/01/1111", amount));
+        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(mActivityTestRule.getActivity()).getUser().getPassword()
+                , customer, "OK2", "02/02/2222", amount));
+        ordersList.add(new GetResponse.Orders(SharedPreferencesManager.getInstance(mActivityTestRule.getActivity()).getPostResponse().getAccessToken()
+                , customer, "OK3", "03/03/3333", amount));
         ordersList.add(new GetResponse.Orders("4444", customer, "OK4", "04/04/4444", amount));
 /*
         recyclerView = findViewById(R.id.recyclerViewId);

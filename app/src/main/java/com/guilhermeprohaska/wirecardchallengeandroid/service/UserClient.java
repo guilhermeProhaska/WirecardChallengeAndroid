@@ -1,10 +1,15 @@
 package com.guilhermeprohaska.wirecardchallengeandroid.service;
 
+import com.guilhermeprohaska.wirecardchallengeandroid.entities.GetResponse;
 import com.guilhermeprohaska.wirecardchallengeandroid.entities.PostResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -22,4 +27,8 @@ public interface UserClient {
             @Field("username") String username,
             @Field("password") String password
     );
+
+    @GET("orders")
+    Call<List<GetResponse>> getRequest(
+            @Header("Authorization: Basic") String authToken);
 }
